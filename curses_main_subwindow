@@ -1,0 +1,23 @@
+#curses_submainwindow.py
+import curses
+from curses import panel
+from curses import wrapper
+
+def main(stdscr):
+    stdscr = curses.initscr()
+
+    window = curses.newwin(0,0, 0,0)
+    #window.border("w", "w", "w", "w")
+    window.border(60,60,60,60,60,60,60,60)
+    window.addstr(1,1, "mainwindow")
+
+    sub = window.subwin(6,12,6,6)
+    sub.border(60,60,60,60,60,60,60,60)
+    sub.addstr(1,1, "subwindow")
+
+    window.refresh()
+    stdscr.getch()
+
+    curses.endwin()
+wrapper(main)
+
