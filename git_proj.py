@@ -7,59 +7,80 @@ from curses import wrapper
 
 def main(stdscr):
     curses.curs_set(0)
-    stdscr = curses.initscr()
-    stdscr.refresh()
-
-    pad = curses.newpad(50, 30)
-    pad_length = 6
-    pad_ypos =  stdscr.getmaxyx()[0]/6
-
-#    pad.box()
-#    pad.border(124,124, 95,95)
-
-    win1 = curses.newwin(1,40, pad_ypos, 50)
+    win1 = curses.newwin(4,0, 0,0)
     win1.box()
-    win1.border(0)
+    win1.refresh()
 
-    position = 0 
-    file_list = glob("*.py")
-    offset = 0
+    win2 = curses.newwin(4,0, 5,0)
+    win2.box()
+    win2.refresh()
+
+    git_commands = (
+        "1. git pull",
+        "2. git add -A",
+        "3. git commit -m comment",
+        "4. git push -u curses https://ningishziddatao@github.com/curses",
+        "5. git push -u curses https://ningishziddatao@github.com/vim"
+        )
+
+    stdscr.box()
+
+    def display_menu():
+        for i, x in enumerate(git_commands):
+            stdscr.addstr(i,0, git_commands[i])
+
+    display_menu()
 
     while True:
-        #display
-        for i, x in enumerate(file_list):
-            if position == i:
-                mod = curses.A_REVERSE
-            else:
-                mod = curses.A_NORMAL
+        key = stdscr.getch()
 
-            pad.addstr(i, 0, file_list[i], mod)
-            pad.refresh(offset ,0, pad_ypos,6 , pad_length+pad_ypos,75)
-
-        key = pad.getch() 
-
-        #pad down
-        if key == ord("j") and position < len(file_list)-1:
-            position += 1
-            if key == ord("j") and offset < len(file_list)-pad_length-1:
-                offset +=1
-
-        #pad up
-        if key == ord("k") and position > -0:
-            position -= 1
-            if key == ord("k") and offset > 0:
-                offset -=1
-
-        #display widget name
         if key == 10:
-            win1.clear()
-            win1.addstr(file_list[position])
-            win1.refresh()
+            stdscr.clear()
+            stdscr.box()
 
-        #exit
-        if key == ord("c"):
+            display_menu()
+
+
+        if key == ord("1"):
+            #stdscr.box()
+            curses.endwin()
+            os.system("git pull")
+            os.system("git status")
+            stdscr = curses.initscr()
+            stdscr.addstr(23,0 ,"press enter to continue, q to quit")
+
+        if key == ord("2"):
+            #stdscr.box()
+            curses.endwin()
+            os.system("git add -A")
+            os.system("git status")
+            stdscr = curses.initscr()
+            stdscr.addstr(23,0 ,"press enter to continue, q to quit")
+
+        if key == ord("3"):
+            curses.endwin()
+            os.system("git commit -m comment")
+            stdscr = curses.initscr()
+            stdscr.addstr(23,0 ,"press enter to continue, q to quit")
+
+        if key == ord("4"):
+            curses.endwin()
+            os.system("git push -u https://ningishziddatao@github.com/ningishziddakundalini/python2.7_curses")
+            #os.system("git status")
+            stdscr = curses.initscr()
+            stdscr.addstr(23,0 ,"press enter to continue, q to quit")
+        if key == ord("q"):
             break
 
-    curses.endwin()
-wrapper(main)
+
+        if key == ord("5"):
+            curses.endwin()
+            os.system("git push -u https://ningishziddatao@github.com/ningishziddakundalini/vim")
+            #os.system("git status")
+            stdscr = curses.initscr()
+            stdscr.addstr(23,0 ,"press enter to continue, q to quit")
+        if key == ord("q"):
+            break
+if __name__ == '__main__':
+    curses.wrapper(main)
 
