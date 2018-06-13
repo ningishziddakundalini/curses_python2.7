@@ -1,4 +1,4 @@
-#git_proj.py
+#git_basixshort.py
 import curses
 import os
 from glob import glob
@@ -6,7 +6,12 @@ from time import sleep
 from curses import panel
 from curses import wrapper
 
+#This program is made to execute basic git commands, with shortcuts,
+#iterates tru git maps changes working directory 
+#creates a menu with list of repository defined in git.txt and executes the commands.
+
 def main(stdscr):
+    #init
     curses.curs_set(0)
     position = 0
     offset = 0
@@ -14,6 +19,7 @@ def main(stdscr):
     repo_list = []
     url_list = []
 
+    #lists
     with open("git.txt") as reader:
         git_list = reader.read().split("\n")
         for line in git_list:
@@ -23,9 +29,9 @@ def main(stdscr):
                 url_list.append(line)
 
     git_commands = (
-        "1. git status",
-        "2. git add -A",
-        "3. git pull",
+        "1. git pull",
+        "2. git status",
+        "3. git add -A",
         "4. git commit -m comment",
         "5. git push -u repo"
         )
@@ -55,36 +61,44 @@ def main(stdscr):
         stdscr.getch()
         stdscr.box()
 
-    spacey, spacex = layout(0.80, 0.50)
-    win1y, win1x = layout(0.20, 0)
-    win1 = panel_setup(win1y,win1x, spacey,0)
+    #scaling
+    spaceY = 4 #upper window
+    stdscrY, stdscrX = layout(0.80, 1.00) #mid window
+    win1y, win1x = layout(0.20, 0) #lower window
+    win1 = panel_setup(win1y,win1x, stdscrY,0)
+    pad2 = curses.newpad(100, 100)
 
-    pad2 = curses.newpad(100,40)    
-    pad2.refresh(offset ,0, 2,spacex ,len(repo_list)+2,40+spacex)
-    stdscr.refresh()
+
 
     while True:
+        #init
         push = (url_list[position])
         cwd = os.chdir(repo_list[position])
-        pad2.refresh(offset ,0, 2,spacex ,len(repo_list)+2,40+spacex)
+
+        #update
+        #pad.refresh(offsetY ,offsetX, start_posY, start_posX ,end_posY, end_posX)
+        pad2.refresh(offset ,0, spaceY,40 ,stdscrY-1, stdscrX-1)
+        stdscr.hline(ord("_"), stdscrX)
         stdscr.refresh()
         curses.panel.update_panels()
        
         win1.clear()
 
-        win1.box(94,94)
-        win1.addstr(1,1, push)
-        win1.addstr(2,1, "cwd = "+os.getcwd())
+        #display_info
+        win1.box(0,ord("_"))
+        win1.addstr(1,1,"repository = "+ push)
+        win1.addstr(3,1, "current workig directory = "+os.getcwd())
         #win1.addstr(2,1, "cwd = "+repo_list[position])
         #win1.addstr(3,1, "repo path = "+os.getcwd()+repo_list[position])
         #win1.addstr(1,1, "git push = "+"www.https//:ningishziddatoa@"+str(url_list[position][8:]))
        
         win1.refresh()
 
+        #display_commands
         pad1 = curses.newpad(100,40)    
         for_addstr(pad1, git_commands)
         stdscr.refresh()
-        pad1.refresh(0,0, 2,6, 6,40)
+        pad1.refresh(0,0, spaceY,6, stdscrY-1,30)
 
         #pad2_menu
         for i, x in enumerate(repo_list):
@@ -95,7 +109,8 @@ def main(stdscr):
 
             pad2.addstr(i, 0, x, mod)
 
-        pad2.refresh(offset ,0, 2,spacex ,len(repo_list)+2,40+spacex)
+        pad2.refresh(offset ,0, spaceY,40 ,stdscrY-1, stdscrX-1)
+        #pad2.refresh(offset ,0, spaceY,stdscrX ,len(repo_list)+2,40+stdscr)
         stdscr.refresh()
 
         #controls
@@ -113,7 +128,7 @@ def main(stdscr):
             if key == ord("k") and offset > 0:
                 offset -=1
 
-        #display widget name
+        #display_widge_name
         if key == 10:
             win1.erase()
             win1.addstr(git_commands[position])
@@ -124,14 +139,15 @@ def main(stdscr):
             break
 
         #options
+
         if key == ord("1"):
-            display_terminal("git status")
+            display_terminal("git pull "+url_list[position])
 
         if key == ord("2"):
-            display_terminal("git add -A")
+            display_terminal("git status")
 
         if key == ord("3"):
-            display_terminal("git pull "+url_list[position])
+            display_terminal("git add -A")
 
         if key == ord("4"):
             display_terminal("git commit -m comment") 

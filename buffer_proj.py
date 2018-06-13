@@ -13,13 +13,8 @@ def main(stdscr):
     pad = curses.newpad(50, 30)
     pad_length = 6
     pad_ypos =  stdscr.getmaxyx()[0]/6
-
     pad.box()
     pad.border(124,124, 0,0)
-
-    win1 = curses.newwin(1,40, pad_ypos, 50)
-    win1.box()
-    win1.border(0)
 
     position = 0 
     file_list = glob("*.py")
@@ -57,7 +52,7 @@ def main(stdscr):
             win1.refresh()
 
         #exit
-        if key == ord("c"):
+        if key == ord("q"):
             break
 
     curses.endwin()

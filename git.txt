@@ -1,0 +1,8 @@
+#/home/git/vim_files
+https://github.com/ningishziddakundalini/vim_files
+#/home/git/info
+https://github.com/ningishziddakundalini/info
+#/home/git/curses_python2.7
+https://github.com/ningishziddakundalini/curses_python2.7
+#/home/git/wT_python2.7
+https://github.com/ningishziddakundalini/wT_python2.7

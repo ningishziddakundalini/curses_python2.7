@@ -1,5 +1,6 @@
-#curses_pad.py
+#buffer_proj.py
 import curses
+import os
 from glob import glob
 from curses import panel
 from curses import wrapper
@@ -9,13 +10,20 @@ def main(stdscr):
     stdscr = curses.initscr()
     stdscr.refresh()
 
-    pad = curses.newpad(50, 50)
-    pad_length = 6
-    pad_ypos =  stdscr.getmaxyx()[0]/6
+#    win1 = curses.newwin(1,40, pad_ypos, 50)
+#    win1.box()
+#    win1.border(0)
 
     position = 0 
     file_list = glob("*.py")
     offset = 0
+
+    pad = curses.newpad(50, 30)
+    pad_length = 6
+    pad_ypos =  stdscr.getmaxyx()[0]/6
+
+    pad.box()
+    pad.border(124,124, 0,0)
 
     while True:
         #display
@@ -42,8 +50,14 @@ def main(stdscr):
             if key == ord("k") and offset > 0:
                 offset -=1
 
+        #display widget name
+        if key == 10:
+            win1.erase()
+            win1.addstr(file_list[position])
+            win1.refresh()
+
         #exit
-        if key == ord("c"):
+        if key == ord("q"):
             break
 
     curses.endwin()
