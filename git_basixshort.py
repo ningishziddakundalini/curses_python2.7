@@ -6,9 +6,14 @@ from time import sleep
 from curses import panel
 from curses import wrapper
 
-#This program is made to execute basic git commands, with shortcuts,
-#iterates tru git maps changes working directory 
-#creates a menu with list of repository defined in git.txt and executes the commands.
+"""
+This program is made to execute basic git commands, with shortcuts,
+iterates tru git maps changes working directory 
+creates a menu with list of repository defined in git.txt and executes the commands.
+
+j = down k = up and if you press they key of the numbers you will activate the
+git functions
+"""
 
 def main(stdscr):
     #init
@@ -68,11 +73,9 @@ def main(stdscr):
     win1 = panel_setup(win1y,win1x, stdscrY,0)
     pad2 = curses.newpad(100, 100)
 
-
-
     while True:
         #init
-        push = (url_list[position])
+        push = ("https://ningishziddatao@"+url_list[position][8:])
         cwd = os.chdir(repo_list[position])
 
         #update
@@ -86,11 +89,11 @@ def main(stdscr):
 
         #display_info
         win1.box(0,ord("_"))
-        win1.addstr(1,1,"repository = "+ push)
-        win1.addstr(3,1, "current workig directory = "+os.getcwd())
+        win1.addstr(1,1,repo_list[position])
+        win1.addstr(2,1, "current workig directory = "+os.getcwd())
+        win1.addstr(3,1, "push = "+push)
         #win1.addstr(2,1, "cwd = "+repo_list[position])
         #win1.addstr(3,1, "repo path = "+os.getcwd()+repo_list[position])
-        #win1.addstr(1,1, "git push = "+"www.https//:ningishziddatoa@"+str(url_list[position][8:]))
        
         win1.refresh()
 
